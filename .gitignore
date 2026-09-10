@@ -1,0 +1,20 @@
+# Node.js & Môi trường (Tuyệt đối không push)
+node_modules/
+.env
+.env.*
+*.log
+npm-debug.log*
+
+# Thư mục build của React/Vite (Frontend)
+dist/
+dist-ssr/
+build/
+
+# File hệ điều hành & Trình soạn thảo (VS Code)
+.DS_Store
+.vscode/
+.idea/
+
+# Thư mục lưu trữ ảnh người dùng upload (Backend)
+# Mở comment dòng dưới nếu bạn dùng multer lưu ảnh cục bộ
+# backend/uploads/
