@@ -9,7 +9,7 @@ module.exports = (sequelize)=>{
     }
     Comments.init(
         {
-            id:{type: DataTypes.INTEGER, allowNull:false},
+            id:{type: DataTypes.INTEGER, allowNull:false, primaryKey:true},
             post_id: DataTypes.INTEGER,
             user_id: DataTypes.INTEGER, 
             content: DataTypes.TEXT

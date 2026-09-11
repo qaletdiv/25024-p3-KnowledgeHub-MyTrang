@@ -9,7 +9,7 @@ module.exports = (sequelize) =>{
     }
     Users.init(
         {
-            id: {type: DataTypes.INTEGER, allowNull: false},
+            id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
             name: DataTypes.STRING,
             birth: DataTypes.DATEONLY,
             gender: DataTypes.STRING,

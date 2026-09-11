@@ -9,7 +9,7 @@ module.exports = (sequelize) =>{
     }
     Posts.init(
         {
-           id: {type: DataTypes.INTEGER, allowNull: false},
+           id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
            user_id: DataTypes.INTEGER,
            title: DataTypes.STRING,
            content: DataTypes.TEXT,
