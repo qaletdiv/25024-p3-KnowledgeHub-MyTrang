@@ -57,7 +57,8 @@ const logout = async(req,res)=>{
         }
         res.clearCookie('connect.sid',{
             httpOnly: true,
-            sameSite: 'strict'
+            sameSite: 'strict',
+            secure: false
         });
         return res.status(200).json({ message: 'Logout successful' });
     })

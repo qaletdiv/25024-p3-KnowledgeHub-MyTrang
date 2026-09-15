@@ -16,7 +16,6 @@ module.exports = (sequelize) =>{
             gmail: DataTypes.STRING,
             pass: DataTypes.STRING,
             ava: DataTypes.STRING,
-            role: DataTypes.STRING
         },{
             sequelize,
             modelName: 'Users',

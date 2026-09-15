@@ -1,9 +1,25 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const db = require('./models');
 
 app.use(express.json());
+
+//setup cookie
+app.use(session({
+    secret: process.env.JWT_SECRET || 'secret_jwt_key_123',
+    store: new SequelizeStore({db: db.sequelize}),
+    resave: false,
+    saveUninitialized: false,
+    cookie:{
+        httpOnly: true,
+        sameSite: 'strict',
+        maxAge: 24*60*60*1000,
+        secure: false
+    }
+}))
 
 //server->DB
 db.sequelize.sync({alter:true})
