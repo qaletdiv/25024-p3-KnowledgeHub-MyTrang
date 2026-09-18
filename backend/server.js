@@ -5,7 +5,14 @@ const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const app = express();
 const db = require('./models');
 
+//api route
+const authRoutes = require('./routes/authRoute');
+const profileRoutes = require('./routes/profileRoute');
+
 app.use(express.json());
+
+//open public for frontend
+app.use('/uploads', express.static('uploads'));
 
 //setup cookie
 app.use(session({
@@ -20,6 +27,10 @@ app.use(session({
         secure: false
     }
 }))
+
+//filter routers
+app.use('api/auth',authRoutes);
+app.use('api/profile', profileRoutes);
 
 //server->DB
 db.sequelize.sync({alter:true})

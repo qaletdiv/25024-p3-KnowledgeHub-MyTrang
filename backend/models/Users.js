@@ -10,10 +10,10 @@ module.exports = (sequelize) =>{
     Users.init(
         {
             id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
-            name: DataTypes.STRING,
+            username: DataTypes.STRING,
             birth: DataTypes.DATEONLY,
             gender: DataTypes.STRING,
-            gmail: DataTypes.STRING,
+            email: DataTypes.STRING,
             pass: DataTypes.STRING,
             ava: DataTypes.STRING,
         },{

@@ -64,8 +64,27 @@ const logout = async(req,res)=>{
     })
 }
 
+const changePass = async(req,res)=>{
+    try{
+        const {email, newPass} = req.body;
+        const user = db.Users.findOne({where: email});
+        if(!user){
+            return res.status(404).json({message: 'user not exist!'});
+        }
+        const changedPass = bcrypt.hash(newPass, 10);
+        await user.update({
+            pass: changedPass
+        });
+        return res.status(200).json({message: 'password changed!'});
+    }
+    catch(err){
+        return res.status(500).json({message: 'error connect server!'});
+    }
+};
+
 module.exports = {
     register,
     login,
-    logout
+    logout,
+    changePass
 }

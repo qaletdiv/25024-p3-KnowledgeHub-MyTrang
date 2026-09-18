@@ -1,0 +1,42 @@
+Hệ Thống Nền Tảng Chia Sẻ Kiến Thức (Knowledge Hub)
+1. Giới Thiệu
+1.1. Mục đích
+Tài liệu này xác định các yêu cầu chức năng cho ứng dụng Knowledge Hub (Nền tảng viết blog và chia sẻ kiến thức). Hệ thống được thiết kế theo kiến trúc Client-Server, nhằm giúp người dùng cá nhân tạo, quản lý bài viết, tải ảnh lên và tương tác qua bình luận. Trọng tâm cốt lõi của dự án là xây dựng Backend API vững chắc (sử dụng Node.js, Express, Sequelize), kết hợp với giao diện Frontend (sử dụng React) để tương tác mượt mà.
+1.2. Phạm vi
+Dự án bao gồm hai thành phần chính: Backend (cung cấp RESTful API) và Frontend (giao diện tương tác người dùng). Hệ thống bao gồm các luồng nghiệp vụ: Xác thực & Phân quyền, Quản lý Hồ sơ, Quản lý Bài viết, và Bình luận.
+2. Yêu Cầu Chức Năng
+A.0. Cấu trúc và Thiết lập Hệ thống chung
+Mục đích: Đảm bảo hệ thống hoạt động ổn định và phân tách rõ ràng giữa giao diện và logic xử lý dữ liệu.
+Kiến trúc hệ thống: Hệ thống được chia thành 2 phần độc lập kết nối qua RESTful API.
+Backend: Áp dụng Mô hình MVC (Models, Views/Routes, Controllers) với Express.js, đảm nhiệm logic, xử lý bất đồng bộ, quản lý file log (fs) và tương tác CSDL qua Sequelize ORM.
+Frontend: Ứng dụng Single Page Application (SPA) xây dựng bằng React, quản lý state và gọi API Backend (qua Fetch/Axios).
+Quản lý File & Upload: Backend cung cấp API xử lý upload hình ảnh và lưu trữ file nội bộ; Frontend xử lý giao diện cho phép người dùng chọn và xem trước file trước khi gửi.
+A.1. Phân hệ Xác thực Người dùng (Auth)
+Yêu cầu truy cập: Công khai (Public).
+Chức năng chính:
+Đăng ký:
+Frontend: Cung cấp form nhập liệu có validation trực tiếp (độ dài, định dạng email).
+Backend: Validation chặt chẽ lại dữ liệu đầu vào. Mã hóa mật khẩu (hash) trước khi lưu trữ xuống CSDL.
+Đăng nhập: Xác thực qua Email/Mật khẩu. Backend cấp phát và gửi Cookie/Session; Frontend lưu trữ cấu hình để giữ phiên đăng nhập cho các request sau.
+Đăng xuất: Hủy bỏ Session tại server và xóa Cookie tại trình duyệt người dùng.
+A.2. Phân hệ Quản lý Hồ sơ (User Profile)
+Yêu cầu truy cập: Đã đăng nhập.
+Chức năng chính:
+Xem & Cập nhật Hồ sơ: Hiển thị thông tin cá nhân. Cho phép người dùng chỉnh sửa thông tin hiển thị.
+Cập nhật Avatar: Frontend hỗ trợ tải file ảnh. Backend kiểm tra định dạng (.jpg, .png) và giới hạn dung lượng file nhằm đảm bảo bảo mật trước khi lưu trữ.
+A.3. Phân hệ Quản lý Bài viết (Blog Posts)
+Yêu cầu truy cập: Xem bài (Public); Tạo/Sửa/Xóa bài (Đã đăng nhập + Có quyền).
+Chức năng chính:
+Đọc bài viết (Read): Khách và Thành viên đều có thể xem danh sách bài viết (Hiển thị dạng danh sách trên React) và chi tiết từng bài.
+Tạo & Cập nhật (Create/Update): Giao diện soạn thảo trên React. Cho phép đính kèm ảnh thumbnail. Backend lưu thông tin bài viết qua Sequelize.
+Phân quyền & Xóa (Delete/Authorization): Frontend chỉ hiển thị nút Xóa/Sửa cho đúng tác giả. Backend có lớp Middleware xác minh quyền sở hữu bài viết trước khi cho phép thay đổi dữ liệu.
+A.4. Phân hệ Tương tác & Bình luận (Comments)
+Yêu cầu truy cập: Xem bình luận (Public); Viết bình luận (Đã đăng nhập).
+Chức năng chính:
+Quản lý Bình luận: Giao diện hiển thị danh sách bình luận theo từng bài viết. Người dùng đã xác thực có thể thêm bình luận mới.
+Kiểm soát dữ liệu: Backend ngăn chặn gửi bình luận rỗng và xử lý truy vấn dựa trên quan hệ 1-N (User-Comment, Post-Comment).
+3. Yêu Cầu Phi Chức Năng
+Tính bảo mật: Chống XSS (bằng cách escape nội dung trên Frontend) và phòng ngừa SQL Injection (Backend sử dụng Sequelize ORM). Mật khẩu luôn được băm.
+Hiệu năng: Quá trình tương tác giữa Client và API phải tối ưu. Backend xử lý I/O không chặn Event Loop, đảm bảo thời gian phản hồi API nhỏ hơn 300ms.
+Khả năng đáp ứng (Responsive): Giao diện Frontend bằng React phải hiển thị tốt trên cả máy tính và thiết bị di động.
+Tính tương thích chéo: Tách bạch kiến trúc Backend cung cấp nền tảng vững chắc, sẵn sàng để sau này Frontend React dễ dàng giao tiếp qua HTTP request chuẩn.
