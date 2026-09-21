@@ -7,7 +7,7 @@ const getProfile = async(req,res)=>{
         if(!userId){
             return res.status(400).json({message: 'login to continue!'});
         }
-        const user = await db.Users.findOne({where: userId});
+        const user = await db.Users.findOne({where: {id: userId}});
         if(!user){
             return res.status(404).json({message: 'user not exist!'});
         }
@@ -32,7 +32,7 @@ const updateProfile = async (req,res)=>{
             return res.status(400).json({message: 'login to continue!'});
         }
         const {username, email, birth, gender} = req.body;
-        const user = db.Users.findOne({where: userId});
+        const user = await db.Users.findOne({where: {id: userId}});
         if(!user){
             return res.status(404).json({message: 'user not exist!'});
         }
@@ -58,7 +58,7 @@ const updateAvatar = async (req,res)=>{
         if(!req.file){
             return res.status(400).json({message: 'invalid image!'});
         }
-        const user = db.Users.findByPk(userId);
+        const user = await db.Users.findByPk(userId);
         const url = `uploads/avatars/${req.fileName}`
         await user.update({
             ava: url

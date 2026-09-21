@@ -1,6 +1,6 @@
 const avatarUpload = require("./avatarUpload")
 
-const handleAvatar = (req,res)=>{
+const handleUploadMiddlware = (req,res)=>{
     const upload = avatarUpload.single('avatar');
     upload(req,res,(err)=>{
         if(err){

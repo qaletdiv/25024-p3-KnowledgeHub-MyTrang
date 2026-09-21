@@ -15,7 +15,7 @@ module.exports = (sequelize) =>{
             gender: DataTypes.STRING,
             email: DataTypes.STRING,
             pass: DataTypes.STRING,
-            ava: DataTypes.STRING,
+            ava: {type: DataTypes.STRING, defaultValue: null},
         },{
             sequelize,
             modelName: 'Users',

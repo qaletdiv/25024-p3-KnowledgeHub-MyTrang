@@ -9,7 +9,7 @@ const register = async(req,res)=>{
         if(!username || !email || !password){
             return res.status(400).json({message: "do not leave blanks!"});
         }
-        const user_email = db.Users.findOne({where: {email}});
+        const user_email = await db.Users.findOne({where: {email}});
         if(user_email){
             return res.status(401).json({message: "existing email!"});
         }
@@ -67,7 +67,7 @@ const logout = async(req,res)=>{
 const changePass = async(req,res)=>{
     try{
         const {email, newPass} = req.body;
-        const user = db.Users.findOne({where: email});
+        const user = db.Users.findOne({where: {email}});
         if(!user){
             return res.status(404).json({message: 'user not exist!'});
         }

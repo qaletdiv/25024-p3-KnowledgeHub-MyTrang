@@ -10,10 +10,10 @@ module.exports = (sequelize) =>{
     Posts.init(
         {
            id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
-           user_id: DataTypes.INTEGER,
+           userId: DataTypes.INTEGER,
            title: DataTypes.STRING,
            content: DataTypes.TEXT,
-           thumbnail: DataTypes.STRING
+           thumbnail: {type: DataTypes.STRING, defaultValue: null}
         },{
             sequelize,
             modelName: 'Posts',
