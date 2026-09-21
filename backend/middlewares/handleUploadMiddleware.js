@@ -10,4 +10,4 @@ const handleUploadMiddlware = (req,res)=>{
     })
 }
 
-module.exports = handleAvatar;
+module.exports = handleUploadMiddlware;

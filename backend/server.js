@@ -8,6 +8,7 @@ const db = require('./models');
 //api route
 const authRoutes = require('./routes/authRoute');
 const profileRoutes = require('./routes/profileRoute');
+const postRoutes = require('./routes/postRoute');
 
 app.use(express.json());
 
@@ -31,6 +32,7 @@ app.use(session({
 //filter routers
 app.use('api/auth',authRoutes);
 app.use('api/profile', profileRoutes);
+app.use('api/post',postRoutes);
 
 //server->DB
 db.sequelize.sync({alter:true})

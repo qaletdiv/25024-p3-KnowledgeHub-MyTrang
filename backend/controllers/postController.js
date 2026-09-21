@@ -2,7 +2,7 @@ const db = require('../models');
 
 const getAllPosts = async(req,res)=>{
     try{
-        const allPosts = await db.Posts.findAll({include: [{model: db.Users, as: 'author', attributes: ['id', 'username', 'ava']}]});
+        const allPosts = await db.Posts.findAll({include: [{model: db.Users, as: 'author', attributes: ['id', 'username']}]});
         if(!allPosts){
             return res.status(400).json('no post yet!');
         }
@@ -112,11 +112,11 @@ const deletePost = async(req,res)=>{
     }
 }
 
-
 module.exports = {
     getAllPosts,
     getPost,
     updatePost,
     deletePost,
-    createPost
+    createPost,
+    updateThumbnail
 }
