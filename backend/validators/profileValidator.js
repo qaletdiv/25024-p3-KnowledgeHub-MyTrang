@@ -7,16 +7,13 @@ const profileValidator = [
     body('email')
         .optional()
         .trim()
-        .isEmail()
-        .withMessage('invalid email!'),
+        .isEmail().withMessage('invalid email!'),
     body('gender')
         .optional()
-        .isLength({min: 4})
-        .withMessage('invalid data'),
+        .isLength({min: 4}).withMessage('invalid data'),
     body('birth')
         .optional()
-        .isDate()
-        .withMessage('invalid data!')  
+        .isDate().withMessage('invalid data!')  
 ];
 
 module.exports = {

@@ -2,8 +2,30 @@ const db = require('../models');
 
 const getAllPosts = async(req,res)=>{
     try{
-        const allPosts = await db.Posts.findAll({include: [{model: db.Users, as: 'author', attributes: ['id', 'username']}]});
-        if(!allPosts){
+        const allPosts = await db.Posts.findAll({
+            include: 
+                [
+                    {
+                        model: db.Users, 
+                        as: 'author', 
+                        attributes: ['id', 'username']
+                    },
+                    {
+                        model: db.Comments, 
+                        include: 
+                            [
+                                {
+                                    model: db.Users, 
+                                    as: 'author', 
+                                    attributes: ['id', 'username']
+                                }
+                            ],
+                        as: 'comments', 
+                        attributes: ['id', 'content'],     
+                    }
+                ]
+            });
+        if(allPosts.length == 0){
             return res.status(400).json('no post yet!');
         }
         return res.status(200).json({allPosts: allPosts});
