@@ -34,7 +34,7 @@ app.use(session({
 app.use('/api/auth',authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/post',postRoutes);
-app.use('/api/post/:id',commentRoutes);
+app.use('/api/comment',commentRoutes);
 
 //server->DB
 db.sequelize.sync({ alter: true})

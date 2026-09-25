@@ -35,9 +35,10 @@ const getAllPosts = async(req,res)=>{
     }
 }
 
+//get all post from the chosen user id
 const getPost = async (req,res)=>{
     try{
-        const userId = req.params.id;
+        const userId = req.params.id; //user id
         const userPosts = await db.Posts.findAll({where: {userId}});
         if(userPosts.length === 0){
             return res.status(400).json({message: 'no post yet!'});
@@ -105,8 +106,9 @@ const updateThumbnail = async (req,res)=>{
         if(!post){
             return res.status(400).json({message: 'post not found!'});
         }
+        const url = `uploads/thumbnails/${req.file.filename}`
         await post.update({
-            thumbnail: req.file.filename
+            thumbnail: url
         });
         return res.status(200).json({message: 'update successfully!'});
     }

@@ -4,7 +4,7 @@ const db = require('../models');
 const createComment = async(req,res)=>{
     try{
         const {content} = req.body;
-        const post = await db.Posts.findByPk(req.params.id);
+        const post = await db.Posts.findByPk(req.params.postId);
         if(!post){
             return res.status(400).json({message:'post does not exist!'});
         }
