@@ -1,7 +1,7 @@
 const {body} = require('express-validator');
 
 const commentValidation = [
-    body['content']
+    body('content')
         .notEmpty().withMessage('do not leave blank!') 
         .trim()    
 ]

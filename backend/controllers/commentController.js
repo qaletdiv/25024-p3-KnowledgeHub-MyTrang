@@ -9,8 +9,8 @@ const createComment = async(req,res)=>{
             return res.status(400).json({message:'post does not exist!'});
         }
         await db.Comments.create({
-            post_id: post.id,
-            user_id: req.session.userId,
+            postId: post.id,
+            userId: req.session.userId,
             content: content
         });
         return res.status(200).json({message: 'comment sucessfully!'})
@@ -39,7 +39,7 @@ const updateComment = async(req,res)=>{
 
 const deleteComment = async(req,res)=>{
     try{
-        const comment = db.Comments.findByPk(req.params.commentId);
+        const comment = await db.Comments.findByPk(req.params.commentId);
         if(!comment){
             return res.status(400).json({message: 'comment does not exist!'});
         }

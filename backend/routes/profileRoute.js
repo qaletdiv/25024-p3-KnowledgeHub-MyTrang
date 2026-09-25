@@ -9,6 +9,6 @@ const handleValidation = require('../validators/handleValidation')
 
 router.get('/',requireLogin, profileControllers.getProfile);
 router.put('/',requireLogin, profileValidator, handleValidation, profileControllers.updateProfile);
-router.put('/avatar', requireLogin, avatarUpload.single('avatar'), handleUploadMiddleware, profileControllers.updateAvatar);
+router.put('/avatar', requireLogin,handleUploadMiddleware.handleUploadAvatar, profileControllers.updateAvatar);
 
 module.exports = router;

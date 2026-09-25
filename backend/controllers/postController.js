@@ -39,7 +39,7 @@ const getPost = async (req,res)=>{
     try{
         const userId = req.params.id;
         const userPosts = await db.Posts.findAll({where: {userId}});
-        if(!userPosts){
+        if(userPosts.length === 0){
             return res.status(400).json({message: 'no post yet!'});
         }
         return res.status(200).json({userPosts: userPosts});
@@ -106,7 +106,7 @@ const updateThumbnail = async (req,res)=>{
             return res.status(400).json({message: 'post not found!'});
         }
         await post.update({
-            thumbnail: req.fileName
+            thumbnail: req.file.filename
         });
         return res.status(200).json({message: 'update successfully!'});
     }

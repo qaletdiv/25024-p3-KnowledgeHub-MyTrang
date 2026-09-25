@@ -6,7 +6,7 @@ const storage = multer.diskStorage({
         cb(null,'uploads/thumbnails');
     },
     filename: function(req,file,cb){
-        const ext = path.extname(file.filename);
+        const ext = path.extname(file.originalname);
         const name = `thumbnail_${req.params.id}${ext}`;
         cb(null,name);
     }
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 
 const filterFile = (req,file,cb)=>{
     if(!file.mimetype.startsWith('image/')){
-        cb(new Error('invalid file'), false);
+        return cb(new Error('invalid file'), false);
     }
     cb(null,true);
 };

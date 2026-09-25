@@ -12,9 +12,9 @@ const getProfile = async(req,res)=>{
             return res.status(404).json({message: 'user not exist!'});
         }
         const resUser = {
-            username: user.name,
+            username: user.username,
             email: user.email,
-            avatar: user.ava,
+            avatar: user.avatar,
             gender: user.gender,
             birth: user.birth
         };
@@ -31,14 +31,13 @@ const updateProfile = async (req,res)=>{
         if(!userId){
             return res.status(400).json({message: 'login to continue!'});
         }
-        const {username, email, birth, gender} = req.body;
+        const {username, birth, gender} = req.body;
         const user = await db.Users.findOne({where: {id: userId}});
         if(!user){
             return res.status(404).json({message: 'user not exist!'});
         }
         await user.update({
-            username, 
-            email,
+            username,
             birth,
             gender
         });
@@ -59,9 +58,9 @@ const updateAvatar = async (req,res)=>{
             return res.status(400).json({message: 'invalid image!'});
         }
         const user = await db.Users.findByPk(userId);
-        const url = `uploads/avatars/${req.fileName}`
+        const url = `uploads/avatars/${req.file.filename}`
         await user.update({
-            ava: url
+            avatar: url
         });
         return res.status(200).json({message: 'avatar update successfully!'});
     }

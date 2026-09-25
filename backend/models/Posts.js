@@ -3,13 +3,13 @@ const {Model, DataTypes} = require('sequelize');
 module.exports = (sequelize) =>{
     class Posts extends Model{
         static associate(models){
-            Posts.belongsTo(models.Users,{foreignKey: 'user_id', as: 'author'});
-            Posts.hasMany(models.Comments,{foreignKey: 'id', as:'comments'});
+            Posts.belongsTo(models.Users,{foreignKey: 'userId', as: 'author'});
+            Posts.hasMany(models.Comments,{foreignKey: 'postId', as:'comments'});
         } 
     }
     Posts.init(
         {
-           id: {type: DataTypes.INTEGER, allowNull: false, primaryKey: true},
+           id: {type: DataTypes.INTEGER, allowNull: false, autoIncrement: true,primaryKey: true},
            userId: DataTypes.INTEGER,
            title: DataTypes.STRING,
            content: DataTypes.TEXT,

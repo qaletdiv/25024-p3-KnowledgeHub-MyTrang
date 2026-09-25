@@ -1,6 +1,6 @@
 const avatarUpload = require("./avatarUpload")
-
-const handleUploadMiddlware = (req,res)=>{
+const thumbnailUpload = require('./thumbnailUpload')
+const handleUploadAvatar = (req,res,next)=>{
     const upload = avatarUpload.single('avatar');
     upload(req,res,(err)=>{
         if(err){
@@ -10,4 +10,17 @@ const handleUploadMiddlware = (req,res)=>{
     })
 }
 
-module.exports = handleUploadMiddlware;
+const handleUploadThumbnail = (req,res,next)=>{
+    const upload = thumbnailUpload.single('thumbnail');
+    upload(req,res,(err)=>{
+        if(err){
+            return res.status(400).json({message: err.message});
+        }
+        next();
+    })
+}
+
+module.exports = {
+    handleUploadAvatar,
+    handleUploadThumbnail
+};

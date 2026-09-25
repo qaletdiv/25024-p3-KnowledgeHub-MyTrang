@@ -1,0 +1,273 @@
+{
+  "info": {
+    "name": "KnowledgeHub API",
+    "description": "Auto-generated from backend/routes, backend/controllers and backend/validators.\n\nNotes:\n- Auth uses express-session with an httpOnly cookie (connect.sid). Postman's cookie jar handles this automatically as long as every request in this collection uses {{baseUrl}} and you run Login first.\n- server.js currently reads the app port from process.env.DB_PORT (falls back to 3001). With the committed .env (DB_PORT=3306) the server listens on 3306, not 3001 — update the `baseUrl` variable below to match whatever port your server actually logs on start (\"server listening at ...\").\n- authValidator validates a field named `pass`, but authController.register/login destructure `password` from req.body. Register/Login requests in this collection send both `password` and `pass` with the same value so the request passes validation and the controller picks up the value correctly.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3001", "type": "string" },
+    { "key": "postId", "value": "1", "type": "string" },
+    { "key": "commentId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"trang\",\n  \"email\": \"trang@example.com\",\n  \"password\": \"123456\",\n  \"pass\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "register"]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"trang@example.com\",\n  \"password\": \"123456\",\n  \"pass\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "login"]
+            },
+            "description": "On success this sets the connect.sid session cookie that authenticated requests below rely on."
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "logout"]
+            }
+          }
+        },
+        {
+          "name": "Change password (forget)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"trang@example.com\",\n  \"newPass\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/forget",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "forget"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get profile",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile"]
+            },
+            "description": "Requires an active session (log in first)."
+          }
+        },
+        {
+          "name": "Update profile",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"trang\",\n  \"email\": \"trang@example.com\",\n  \"birth\": \"2000-01-01\",\n  \"gender\": \"female\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile"]
+            }
+          }
+        },
+        {
+          "name": "Update avatar",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "avatar", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/profile/avatar",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "profile", "avatar"]
+            },
+            "description": "multipart/form-data, field name must be 'avatar' (multer .single('avatar')). Max 2MB, images only."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Post",
+      "item": [
+        {
+          "name": "Get all posts",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/post",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post"]
+            }
+          }
+        },
+        {
+          "name": "Get post(s) by :id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}"]
+            },
+            "description": "Note: postController.getPost actually queries Posts by userId using req.params.id, so this returns posts belonging to the user whose id is :id, not a single post by post id."
+          }
+        },
+        {
+          "name": "Create post",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"My first post\",\n  \"content\": \"Post content goes here\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/post",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post"]
+            },
+            "description": "Requires an active session."
+          }
+        },
+        {
+          "name": "Update post",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated title\",\n  \"content\": \"Updated content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}"]
+            },
+            "description": "Requires session and post ownership."
+          }
+        },
+        {
+          "name": "Update thumbnail",
+          "request": {
+            "method": "PUT",
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                { "key": "thumbnail", "type": "file", "src": [] }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}/thumbnail",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}", "thumbnail"]
+            },
+            "description": "multipart/form-data, field name must be 'thumbnail'. Requires session and post ownership."
+          }
+        },
+        {
+          "name": "Delete post",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}"]
+            },
+            "description": "Requires session and post ownership."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comment",
+      "item": [
+        {
+          "name": "Create comment",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Nice post!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}/comment",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}", "comment"]
+            },
+            "description": "Requires an active session. :id in the URL is the post id."
+          }
+        },
+        {
+          "name": "Update comment",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"content\": \"Updated comment\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}/comment/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}", "comment", "{{commentId}}"]
+            },
+            "description": "Requires session and comment ownership."
+          }
+        },
+        {
+          "name": "Delete comment",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/post/{{postId}}/comment/{{commentId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "post", "{{postId}}", "comment", "{{commentId}}"]
+            },
+            "description": "Requires session and comment ownership."
+          }
+        }
+      ]
+    }
+  ]
+}

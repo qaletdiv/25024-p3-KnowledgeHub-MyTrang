@@ -12,7 +12,7 @@ const handleValidation = require('../validators/handleValidation');
 router.get('/',postControllers.getAllPosts);
 router.get('/:id',postControllers.getPost);
 router.post('/',requireLogin,postValidator,handleValidation, postControllers.createPost);
-router.put('/:id/thumbnail',requireLogin, checkOwnership,thumbnailUpload.single('thumbnail'),handleUploadMiddleware,postControllers.updateThumbnail)
+router.put('/:id/thumbnail',requireLogin, checkOwnership,handleUploadMiddleware.handleUploadThumbnail,postControllers.updateThumbnail)
 router.put('/:id',requireLogin,checkOwnership,postValidator,handleValidation,postControllers.updatePost);
 router.delete('/:id',requireLogin,checkOwnership,postControllers.deletePost);
 

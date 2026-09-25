@@ -5,7 +5,7 @@ const checkCommentOwner = async (req,res,next)=>{
     if(!comment){
         return res.status(400).json({message: 'comment not found!'});
     }
-    if(comment.user_id !== req.session.userId){
+    if(comment.userId !== req.session.userId){
         return res.status(400).json({message: 'not the owner!'});
     }
     next();

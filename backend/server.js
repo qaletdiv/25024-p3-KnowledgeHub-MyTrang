@@ -31,13 +31,13 @@ app.use(session({
 }))
 
 //filter routers
-app.use('api/auth',authRoutes);
-app.use('api/profile', profileRoutes);
-app.use('api/post',postRoutes);
-app.use('api/post/:id',commentRoutes);
+app.use('/api/auth',authRoutes);
+app.use('/api/profile', profileRoutes);
+app.use('/api/post',postRoutes);
+app.use('/api/post/:id',commentRoutes);
 
 //server->DB
-db.sequelize.sync({alter:true})
+db.sequelize.sync({ alter: true})
 .then(()=>{
     console.log('db connected successfully!');
 })
@@ -46,7 +46,7 @@ db.sequelize.sync({alter:true})
 })
 
 //xu ly input vao server (client->server)
-const port = process.env.DB_PORT || 3001;
+const port = 3001;
 app.listen(port,()=>{
     console.log('server listening at',port);
 })
