@@ -6,6 +6,20 @@ import CommentSection from '../components/CommentSection';
 import RichTextEditor from '../components/RichTextEditor';
 import theme from '../theme';
 
+const HoverLink = ({ to, style, hoverStyle, children }) => {
+  const [hover, setHover] = useState(false);
+  return (
+    <Link
+      to={to}
+      style={{ ...style, ...(hover ? hoverStyle : {}) }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+    >
+      {children}
+    </Link>
+  );
+};
+
 export default function PostDetailPage() {
   const { id } = useParams();
   const { user } = useAuth();
@@ -105,7 +119,7 @@ export default function PostDetailPage() {
 
   if (loading) return (
     <div style={s.center}>
-      <span style={s.loadingIcon}>🌸</span>
+      <div style={s.loadingIcon}></div>
       <p style={s.loadingText}>Loading…</p>
     </div>
   );
@@ -117,21 +131,21 @@ export default function PostDetailPage() {
   );
   if (!post) return null;
 
-  const thumbnailUrl = post.thumbnail ? `http://localhost:3001/${post.thumbnail}` : null;
+  const thumbnailUrl = post.thumbnail ? `https://zonal-growth-production-561c.up.railway.app/${post.thumbnail}` : null;
   const date = post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
 
   return (
     <div style={s.page}>
       <div style={s.container}>
         {/* Back link */}
-        <Link to="/" style={s.backLink}>← Back to Home</Link>
+        <HoverLink to="/" style={s.backLink} hoverStyle={s.backLinkHover}>← Back to Home</HoverLink>
 
         {error && <div style={s.errorBox}>{error}</div>}
 
         {editing ? (
           /* ── EDIT MODE ── */
           <div style={s.editCard}>
-            <h2 style={s.editTitle}>✏️ Edit Post</h2>
+            <h2 style={s.editTitle}>Edit Post</h2>
             <form onSubmit={handleUpdate}>
               <div style={s.field}>
                 <label style={s.label}>Title</label>
@@ -150,7 +164,7 @@ export default function PostDetailPage() {
                 />
               </div>
               <div style={s.editActions}>
-                <button type="submit" style={s.saveBtn}>💾 Save Changes</button>
+                <button type="submit" style={s.saveBtn}>Save Changes</button>
                 <button type="button" onClick={() => setEditing(false)} style={s.cancelBtn}>Cancel</button>
               </div>
             </form>
@@ -171,11 +185,11 @@ export default function PostDetailPage() {
               <div style={s.meta}>
                 <div style={s.authorChip}>
                   <div style={s.authorAvatar}>
-                    {post.author?.avatar ? <img src={`http://localhost:3001/${post.author.avatar}`} alt="" style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}} /> : (post.author?.username?.[0]?.toUpperCase() || '?')}
+                    {post.author?.avatar ? <img src={`https://zonal-growth-production-561c.up.railway.app/${post.author.avatar}`} alt="" style={{width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover'}} /> : (post.author?.username?.[0]?.toUpperCase() || '?')}
                   </div>
                   <span style={s.authorName}>{post.author?.username || 'Unknown'}</span>
                 </div>
-                {date && <span style={s.date}>📅 {date}</span>}
+                {date && <span style={s.date}>· {date}</span>}
               </div>
             </div>
 
@@ -188,10 +202,10 @@ export default function PostDetailPage() {
             {/* Owner actions */}
             {isOwner && (
               <div style={s.ownerPanel}>
-                <h4 style={s.ownerPanelTitle}>⚙️ Post Management</h4>
+                <h4 style={s.ownerPanelTitle}>Post Management</h4>
                 <div style={s.ownerActions}>
-                  <button onClick={() => setEditing(true)} style={s.editBtn}>✏️ Edit Post</button>
-                  <button onClick={handleDelete} style={s.deleteBtn}>🗑️ Delete Post</button>
+                  <button onClick={() => setEditing(true)} style={s.editBtn}>Edit Post</button>
+                  <button onClick={handleDelete} style={s.deleteBtn}>Delete Post</button>
                 </div>
 
                 {/* Improved thumbnail upload (bug fix) */}
@@ -202,7 +216,7 @@ export default function PostDetailPage() {
                       <img src={thumbnailPreview} alt="New thumbnail" style={s.thumbPreview} />
                       <div style={s.thumbPreviewActions}>
                         <button onClick={handleThumbnailUpload} disabled={thumbUploading} style={s.uploadBtn}>
-                          {thumbUploading ? 'Uploading…' : '⬆️ Upload'}
+                          {thumbUploading ? 'Uploading…' : 'Upload'}
                         </button>
                         <button onClick={() => { setThumbnailFile(null); setThumbnailPreview(null); }} style={s.removeThumbBtn}>
                           ✕ Remove
@@ -212,7 +226,7 @@ export default function PostDetailPage() {
                     </div>
                   ) : (
                     <div style={s.thumbZone} onClick={() => fileInputRef.current?.click()}>
-                      <span>🖼️ Click to select new thumbnail</span>
+                      <span>Click to select new thumbnail</span>
                     </div>
                   )}
                   <input
@@ -235,111 +249,126 @@ export default function PostDetailPage() {
 }
 
 const s = {
-  page: { background: theme.bg, minHeight: 'calc(100vh - 65px)', padding: '32px 0 60px' },
-  container: { maxWidth: '780px', margin: '0 auto', padding: '0 24px' },
+  page: { background: theme.bg, minHeight: 'calc(100vh - 65px)', padding: '24px 0 60px' },
+  container: { maxWidth: '780px', margin: '0 auto', padding: '0 16px' },
   center: {
     display: 'flex', flexDirection: 'column', alignItems: 'center',
     justifyContent: 'center', minHeight: '60vh', gap: '12px',
   },
-  loadingIcon: { fontSize: '48px' },
-  loadingText: { color: theme.textMuted, fontWeight: '600', fontSize: '15px' },
+  loadingIcon: { 
+    width: '32px', height: '32px', 
+    border: `3px solid ${theme.border}`, 
+    borderTopColor: theme.primary, 
+    borderRadius: '50%', 
+    animation: 'spin 1s linear infinite' 
+  },
+  loadingText: { color: theme.textMuted, fontWeight: '500', fontSize: '14px' },
   backLink: {
-    display: 'inline-flex', alignItems: 'center', gap: '4px',
-    color: theme.textMuted, fontWeight: '700', fontSize: '14px',
+    display: 'inline-flex', alignItems: 'center', gap: '8px',
+    color: theme.text, fontWeight: '600', fontSize: '14px',
     marginBottom: '20px', textDecoration: 'none',
+    padding: '8px 16px', borderRadius: theme.radiusSm,
+    background: '#fff', border: `1px solid ${theme.border}`,
+    transition: 'all 0.2s',
+  },
+  backLinkHover: {
+    background: theme.bgCardHover,
+    color: theme.primaryDark,
+    borderColor: theme.borderFocus,
   },
   errorBox: {
     background: theme.dangerLight, color: theme.danger,
     padding: '12px 20px', borderRadius: theme.radiusSm,
-    fontWeight: '600', fontSize: '14px', marginBottom: '16px',
+    fontWeight: '500', fontSize: '14px', marginBottom: '16px',
+    border: `1px solid rgba(248,113,113,0.2)`
   },
   article: {
-    background: '#fff', borderRadius: theme.radiusLg,
-    border: `1px solid ${theme.border}`, boxShadow: theme.shadowCard, overflow: 'hidden',
+    background: '#fff', borderRadius: theme.radiusSm,
+    border: `1px solid ${theme.border}`, boxShadow: '0 2px 10px rgba(0,0,0,0.03)', overflow: 'hidden',
   },
-  thumbnailWrap: { width: '100%', maxHeight: '380px', overflow: 'hidden' },
-  thumbnail: { width: '100%', height: '380px', objectFit: 'cover' },
-  articleHeader: { padding: '28px 32px 20px' },
-  postTitle: { fontSize: '30px', fontWeight: '800', color: theme.text, marginBottom: '14px', lineHeight: '1.3' },
+  thumbnailWrap: { width: '100%', maxHeight: '420px', overflow: 'hidden', borderBottom: `1px solid ${theme.border}` },
+  thumbnail: { width: '100%', height: '420px', objectFit: 'cover' },
+  articleHeader: { padding: '32px 32px 16px' },
+  postTitle: { fontSize: '32px', fontWeight: '700', color: theme.text, marginBottom: '12px', lineHeight: '1.3' },
   meta: { display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' },
   authorChip: { display: 'flex', alignItems: 'center', gap: '8px' },
   authorAvatar: {
     width: '32px', height: '32px', borderRadius: '50%',
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+    background: theme.primary,
     color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
-    fontWeight: '800', fontSize: '13px',
+    fontWeight: '600', fontSize: '14px',
   },
-  authorName: { fontWeight: '700', fontSize: '14px', color: theme.text },
-  date: { color: theme.textMuted, fontSize: '13px', fontWeight: '600' },
+  authorName: { fontWeight: '600', fontSize: '14px', color: theme.text },
+  date: { color: theme.textMuted, fontSize: '13px', fontWeight: '500' },
   content: {
-    padding: '0 32px 28px',
-    fontSize: '16px', lineHeight: '1.8', color: theme.text,
+    padding: '0 32px 32px',
+    fontSize: '16px', lineHeight: '1.7', color: theme.text,
     // Quill content styles
   },
   ownerPanel: {
-    margin: '0 32px 28px',
+    margin: '0 32px 32px',
     background: theme.bgCardHover,
     borderRadius: theme.radiusSm,
     padding: '20px',
     border: `1px solid ${theme.border}`,
   },
-  ownerPanelTitle: { fontSize: '14px', fontWeight: '800', color: theme.text, marginBottom: '14px' },
-  ownerActions: { display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '16px' },
+  ownerPanelTitle: { fontSize: '15px', fontWeight: '700', color: theme.text, marginBottom: '16px' },
+  ownerActions: { display: 'flex', gap: '12px', flexWrap: 'wrap', marginBottom: '20px' },
   editBtn: {
-    padding: '9px 20px', background: theme.primaryLight, color: theme.primaryDark,
-    border: 'none', borderRadius: theme.radiusPill, cursor: 'pointer',
-    fontWeight: '700', fontSize: '13px', fontFamily: 'Nunito, sans-serif',
+    padding: '10px 22px', background: theme.primaryLight, color: theme.primaryDark,
+    border: 'none', borderRadius: theme.radiusSm, cursor: 'pointer',
+    fontWeight: '600', fontSize: '14px', fontFamily: 'Nunito, sans-serif',
   },
   deleteBtn: {
-    padding: '9px 20px', background: theme.dangerLight, color: theme.danger,
-    border: 'none', borderRadius: theme.radiusPill, cursor: 'pointer',
-    fontWeight: '700', fontSize: '13px', fontFamily: 'Nunito, sans-serif',
+    padding: '10px 22px', background: theme.dangerLight, color: theme.danger,
+    border: 'none', borderRadius: theme.radiusSm, cursor: 'pointer',
+    fontWeight: '600', fontSize: '14px', fontFamily: 'Nunito, sans-serif',
   },
-  thumbSection: { borderTop: `1px solid ${theme.border}`, paddingTop: '16px' },
-  thumbLabel: { fontSize: '13px', fontWeight: '700', color: theme.text, marginBottom: '10px' },
+  thumbSection: { borderTop: `1px solid ${theme.border}`, paddingTop: '20px' },
+  thumbLabel: { fontSize: '14px', fontWeight: '600', color: theme.text, marginBottom: '12px' },
   thumbZone: {
-    border: `2px dashed ${theme.border}`, borderRadius: theme.radiusSm,
-    padding: '16px', textAlign: 'center', cursor: 'pointer',
-    color: theme.textMuted, fontSize: '13px', fontWeight: '600',
+    border: `1px dashed ${theme.borderFocus}`, borderRadius: theme.radiusSm,
+    padding: '24px', textAlign: 'center', cursor: 'pointer', background: theme.bg,
+    color: theme.textMuted, fontSize: '14px', fontWeight: '500',
   },
   thumbPreviewWrap: { position: 'relative' },
-  thumbPreview: { width: '100%', maxHeight: '180px', objectFit: 'cover', borderRadius: theme.radiusSm, display: 'block' },
-  thumbPreviewActions: { display: 'flex', gap: '8px', marginTop: '10px' },
+  thumbPreview: { width: '100%', maxHeight: '220px', objectFit: 'cover', borderRadius: theme.radiusSm, display: 'block' },
+  thumbPreviewActions: { display: 'flex', gap: '10px', marginTop: '12px' },
   uploadBtn: {
-    padding: '7px 16px', background: theme.primary, color: '#fff',
-    border: 'none', borderRadius: theme.radiusPill, cursor: 'pointer',
-    fontWeight: '700', fontSize: '12px', fontFamily: 'Nunito, sans-serif',
+    padding: '8px 18px', background: theme.primary, color: '#fff',
+    border: 'none', borderRadius: theme.radiusSm, cursor: 'pointer',
+    fontWeight: '600', fontSize: '13px', fontFamily: 'Nunito, sans-serif',
   },
   removeThumbBtn: {
-    padding: '7px 14px', background: theme.dangerLight, color: theme.danger,
-    border: 'none', borderRadius: theme.radiusPill, cursor: 'pointer',
-    fontWeight: '700', fontSize: '12px', fontFamily: 'Nunito, sans-serif',
+    padding: '8px 16px', background: theme.dangerLight, color: theme.danger,
+    border: 'none', borderRadius: theme.radiusSm, cursor: 'pointer',
+    fontWeight: '600', fontSize: '13px', fontFamily: 'Nunito, sans-serif',
   },
-  thumbSuccess: { color: '#065f46', fontWeight: '700', fontSize: '12px', marginTop: '8px' },
+  thumbSuccess: { color: theme.primaryDark, fontWeight: '600', fontSize: '13px', marginTop: '10px' },
   // Edit mode
   editCard: {
-    background: '#fff', borderRadius: theme.radiusLg,
-    border: `1px solid ${theme.border}`, boxShadow: theme.shadowCard, padding: '32px',
+    background: '#fff', borderRadius: theme.radiusSm,
+    border: `1px solid ${theme.border}`, boxShadow: '0 2px 10px rgba(0,0,0,0.03)', padding: '40px',
   },
-  editTitle: { fontSize: '22px', fontWeight: '800', color: theme.text, marginBottom: '24px' },
-  field: { marginBottom: '20px' },
-  label: { display: 'block', fontSize: '14px', fontWeight: '700', color: theme.text, marginBottom: '8px' },
+  editTitle: { fontSize: '24px', fontWeight: '700', color: theme.text, marginBottom: '28px' },
+  field: { marginBottom: '24px' },
+  label: { display: 'block', fontSize: '15px', fontWeight: '600', color: theme.text, marginBottom: '10px' },
   titleInput: {
-    width: '100%', padding: '12px 16px',
-    border: `2px solid ${theme.border}`, borderRadius: theme.radiusSm,
-    fontSize: '17px', fontWeight: '700', fontFamily: 'Nunito, sans-serif',
-    color: theme.text, outline: 'none', boxSizing: 'border-box', background: '#faf8ff',
+    width: '100%', padding: '14px 18px',
+    border: `1px solid ${theme.border}`, borderRadius: theme.radiusSm,
+    fontSize: '18px', fontWeight: '600', fontFamily: 'Nunito, sans-serif',
+    color: theme.text, outline: 'none', boxSizing: 'border-box', background: theme.bgCardHover,
   },
-  editActions: { display: 'flex', gap: '12px', marginTop: '24px' },
+  editActions: { display: 'flex', gap: '14px', marginTop: '32px' },
   saveBtn: {
-    padding: '12px 28px', background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+    padding: '14px 32px', background: theme.primary,
     color: '#fff', border: 'none', borderRadius: theme.radiusSm,
-    fontWeight: '800', fontSize: '14px', cursor: 'pointer', fontFamily: 'Nunito, sans-serif',
-    boxShadow: '0 4px 12px rgba(167,139,250,0.35)',
+    fontWeight: '700', fontSize: '15px', cursor: 'pointer', fontFamily: 'Nunito, sans-serif',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
   },
   cancelBtn: {
-    padding: '12px 24px', background: theme.border, color: theme.textMuted,
-    border: 'none', borderRadius: theme.radiusSm,
-    fontWeight: '700', fontSize: '14px', cursor: 'pointer', fontFamily: 'Nunito, sans-serif',
+    padding: '14px 28px', background: theme.bgCardHover, color: theme.textMuted,
+    border: `1px solid ${theme.border}`, borderRadius: theme.radiusSm,
+    fontWeight: '600', fontSize: '15px', cursor: 'pointer', fontFamily: 'Nunito, sans-serif',
   },
 };

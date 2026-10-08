@@ -102,7 +102,7 @@ export default function ProfilePage() {
     </div>
   );
 
-  const avatarUrl = user.avatar ? `http://localhost:3001/${user.avatar}` : null;
+  const avatarUrl = user.avatar ? `https://zonal-growth-production-561c.up.railway.app/${user.avatar}` : null;
   const displayAvatar = avatarPreview || avatarUrl;
 
   return (
@@ -201,7 +201,7 @@ export default function ProfilePage() {
             ) : (
               <div style={s.postsList}>
                 {myPosts.map((post) => {
-                  const thumbUrl = post.thumbnail ? `http://localhost:3001/${post.thumbnail}` : null;
+                  const thumbUrl = post.thumbnail ? `https://zonal-growth-production-561c.up.railway.app/${post.thumbnail}` : null;
                   const date = post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
                   return (
                     <div key={post.id} style={s.postRow}>

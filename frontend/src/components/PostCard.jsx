@@ -2,24 +2,22 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import theme from '../theme';
 
-const GRADIENTS = [
-  'linear-gradient(135deg, #fbc2eb, #a6c1ee)',
-  'linear-gradient(135deg, #a1c4fd, #c2e9fb)',
-  'linear-gradient(135deg, #d4fc79, #96e6a1)',
-  'linear-gradient(135deg, #ffecd2, #fcb69f)',
-  'linear-gradient(135deg, #e0c3fc, #8ec5fc)',
-  'linear-gradient(135deg, #f093fb, #f5576c33)',
+const COLORS = [
+  '#f0eef5',
+  '#f5eef0',
+  '#eef5f0',
+  '#f5f4ee',
 ];
 
 export default function PostCard({ post, index = 0 }) {
   const [isHovered, setIsHovered] = useState(false);
 
   const thumbnailUrl = post.thumbnail
-    ? `http://localhost:3001/${post.thumbnail}`
+    ? `https://zonal-growth-production-561c.up.railway.app/${post.thumbnail}`
     : null;
 
-  const gradient = GRADIENTS[index % GRADIENTS.length];
-  const authorAvatarUrl = post.author?.avatar ? `http://localhost:3001/${post.author.avatar}` : null;
+  const bgColor = COLORS[index % COLORS.length];
+  const authorAvatarUrl = post.author?.avatar ? `https://zonal-growth-production-561c.up.railway.app/${post.author.avatar}` : null;
   const authorInitial = post.author?.username?.[0]?.toUpperCase() || '?';
   const commentCount = post.comments?.length ?? 0;
   const date = post.createdAt ? new Date(post.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
@@ -32,7 +30,7 @@ export default function PostCard({ post, index = 0 }) {
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Thumbnail */}
-        <div style={{ ...s.thumbnail, ...(thumbnailUrl ? {} : { background: gradient }) }}>
+        <div style={{ ...s.thumbnail, ...(thumbnailUrl ? {} : { background: bgColor }) }}>
           {thumbnailUrl && (
             <img src={thumbnailUrl} alt={post.title} style={s.thumbnailImg} />
           )}
@@ -57,7 +55,7 @@ export default function PostCard({ post, index = 0 }) {
               {date && <span style={s.date}>· {date}</span>}
             </div>
             <div style={s.commentBadge}>
-              <span>💬</span>
+              <span style={s.commentIcon}>💬</span>
               <span>{commentCount}</span>
             </div>
           </div>
@@ -70,25 +68,26 @@ export default function PostCard({ post, index = 0 }) {
 const s = {
   card: {
     background: theme.bgCard,
-    borderRadius: theme.radius,
+    borderRadius: theme.radiusSm,
     overflow: 'hidden',
-    boxShadow: theme.shadowCard,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
     border: `1px solid ${theme.border}`,
-    transition: 'all 0.25s ease',
+    transition: 'all 0.2s ease',
     cursor: 'pointer',
     display: 'flex',
     flexDirection: 'column',
   },
   cardHover: {
-    transform: 'translateY(-4px)',
-    boxShadow: theme.shadowHover,
+    transform: 'translateY(-2px)',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
   },
   thumbnail: {
-    height: '160px',
+    height: '320px',
     width: '100%',
     flexShrink: 0,
     overflow: 'hidden',
     position: 'relative',
+    borderBottom: `1px solid ${theme.border}`,
   },
   thumbnailImg: {
     width: '100%',
@@ -96,16 +95,16 @@ const s = {
     objectFit: 'cover',
   },
   body: {
-    padding: '18px 20px 20px',
+    padding: '24px 32px',
     display: 'flex',
     flexDirection: 'column',
     flex: 1,
   },
   title: {
-    fontSize: '16px',
-    fontWeight: '800',
+    fontSize: '24px',
+    fontWeight: '700',
     color: theme.text,
-    marginBottom: '8px',
+    marginBottom: '12px',
     lineHeight: '1.4',
     display: '-webkit-box',
     WebkitLineClamp: 2,
@@ -113,11 +112,11 @@ const s = {
     overflow: 'hidden',
   },
   excerpt: {
-    fontSize: '13px',
+    fontSize: '15px',
     color: theme.textMuted,
-    lineHeight: '1.6',
+    lineHeight: '1.7',
     flex: 1,
-    marginBottom: '14px',
+    marginBottom: '24px',
     display: '-webkit-box',
     WebkitLineClamp: 3,
     WebkitBoxOrient: 'vertical',
@@ -127,43 +126,46 @@ const s = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingTop: '20px',
+    borderTop: `1px solid ${theme.border}40`,
   },
   authorChip: {
     display: 'flex',
     alignItems: 'center',
-    gap: '6px',
+    gap: '8px',
   },
   authorAvatar: {
     width: '24px',
     height: '24px',
     borderRadius: '50%',
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+    background: theme.primary,
     color: '#fff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '11px',
-    fontWeight: '700',
+    fontWeight: '600',
     flexShrink: 0,
   },
   authorName: {
-    fontSize: '12px',
-    fontWeight: '700',
+    fontSize: '13px',
+    fontWeight: '600',
     color: theme.text,
   },
   date: {
-    fontSize: '11px',
-    color: theme.textMuted,
+    fontSize: '12px',
+    color: theme.textLight,
   },
   commentBadge: {
     display: 'flex',
     alignItems: 'center',
     gap: '4px',
-    background: theme.primaryLight,
-    color: theme.primaryDark,
-    fontSize: '12px',
-    fontWeight: '700',
-    padding: '3px 10px',
-    borderRadius: theme.radiusPill,
+    color: theme.textMuted,
+    fontSize: '13px',
+    fontWeight: '600',
   },
+  commentIcon: {
+    fontSize: '12px',
+    opacity: 0.7,
+  }
 };

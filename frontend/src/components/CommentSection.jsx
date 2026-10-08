@@ -74,7 +74,7 @@ export default function CommentSection({ postId, comments: initialComments }) {
           <div style={s.inputRow}>
             <div style={s.myAvatar}>
               {user.avatar
-                ? <img src={`http://localhost:3001/${user.avatar}`} alt="" style={s.myAvatarImg} />
+                ? <img src={`https://zonal-growth-production-561c.up.railway.app/${user.avatar}`} alt="" style={s.myAvatarImg} />
                 : <span>{user.username?.[0]?.toUpperCase()}</span>
               }
             </div>
@@ -105,7 +105,7 @@ export default function CommentSection({ postId, comments: initialComments }) {
         ) : (
           comments.map((comment, i) => {
             const initial = comment.author?.username?.[0]?.toUpperCase() || '?';
-            const avatarUrl = comment.author?.avatar ? `http://localhost:3001/${comment.author.avatar}` : null;
+            const avatarUrl = comment.author?.avatar ? `https://zonal-growth-production-561c.up.railway.app/${comment.author.avatar}` : null;
             const isMine = isMyComment(comment);
             return (
               <div key={comment.id} style={{ ...s.bubble, ...(isMine ? s.bubbleMine : {}) }}>
@@ -152,8 +152,9 @@ export default function CommentSection({ postId, comments: initialComments }) {
 const s = {
   section: {
     marginTop: '32px',
-    paddingTop: '28px',
-    borderTop: `2px dashed ${theme.border}`,
+    padding: '28px 32px 32px',
+    borderTop: `1px solid ${theme.border}`,
+    background: theme.bgCardHover,
   },
   heading: {
     display: 'flex',
@@ -177,8 +178,8 @@ const s = {
   },
   form: {
     marginBottom: '24px',
-    background: theme.bgCardHover,
-    borderRadius: theme.radius,
+    background: '#fff',
+    borderRadius: theme.radiusSm,
     padding: '16px',
     border: `1px solid ${theme.border}`,
   },
@@ -191,12 +192,12 @@ const s = {
     width: '36px',
     height: '36px',
     borderRadius: '50%',
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+    background: theme.primary,
     color: '#fff',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontWeight: '800',
+    fontWeight: '700',
     fontSize: '14px',
     flexShrink: 0,
     overflow: 'hidden',
@@ -205,7 +206,7 @@ const s = {
   textarea: {
     flex: 1,
     padding: '10px 14px',
-    border: `2px solid ${theme.border}`,
+    border: `1px solid ${theme.border}`,
     borderRadius: theme.radiusSm,
     fontSize: '14px',
     resize: 'none',
@@ -214,7 +215,7 @@ const s = {
     color: theme.text,
     lineHeight: '1.6',
     transition: 'border 0.2s',
-    background: '#fff',
+    background: '#faf8ff',
   },
   formFooter: {
     display: 'flex',
@@ -222,15 +223,14 @@ const s = {
     marginTop: '10px',
   },
   submitBtn: {
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
+    background: theme.primary,
     color: '#fff',
     border: 'none',
     padding: '9px 22px',
-    borderRadius: theme.radiusPill,
-    fontWeight: '700',
+    borderRadius: theme.radiusSm,
+    fontWeight: '600',
     fontSize: '13px',
     cursor: 'pointer',
-    boxShadow: '0 4px 12px rgba(167,139,250,0.3)',
     opacity: 1,
     transition: 'opacity 0.2s',
   },
@@ -239,12 +239,13 @@ const s = {
     color: theme.textMuted,
     fontSize: '14px',
     padding: '16px',
-    background: theme.primaryLight,
+    background: '#fff',
     borderRadius: theme.radiusSm,
     marginBottom: '20px',
+    border: `1px solid ${theme.border}`,
   },
   loginLink: { color: theme.primaryDark, fontWeight: '700' },
-  list: { display: 'flex', flexDirection: 'column', gap: '12px' },
+  list: { display: 'flex', flexDirection: 'column', gap: '16px' },
   empty: {
     textAlign: 'center',
     color: theme.textMuted,
@@ -267,7 +268,7 @@ const s = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    fontWeight: '800',
+    fontWeight: '700',
     fontSize: '13px',
     flexShrink: 0,
   },
@@ -277,9 +278,9 @@ const s = {
   },
   bubbleContent: {
     flex: 1,
-    background: theme.bgCardHover,
-    borderRadius: '4px 16px 16px 16px',
-    padding: '12px 16px',
+    background: '#fff',
+    borderRadius: theme.radiusSm,
+    padding: '16px',
     border: `1px solid ${theme.border}`,
   },
   bubbleHeader: {

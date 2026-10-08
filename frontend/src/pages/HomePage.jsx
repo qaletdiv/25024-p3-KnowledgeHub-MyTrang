@@ -31,7 +31,7 @@ export default function HomePage() {
 
   if (loading) return (
     <div style={s.loadingWrap}>
-      <div style={s.loadingSpinner}>🌸</div>
+      <div style={s.loadingSpinner}></div>
       <p style={s.loadingText}>Loading posts…</p>
     </div>
   );
@@ -43,7 +43,7 @@ export default function HomePage() {
         <h1 style={s.heroTitle}>Knowledge Hub</h1>
         <p style={s.heroSub}>Discover stories, ideas & knowledge shared by our community</p>
         {user && (
-          <Link to="/create-post" style={s.heroBtn}>✏️ Write your story</Link>
+          <Link to="/create-post" style={s.heroBtn}>Write your story</Link>
         )}
       </div>
 
@@ -52,7 +52,7 @@ export default function HomePage() {
 
         {posts.length === 0 ? (
           <div style={s.empty}>
-            <span style={s.emptyIcon}>🌷</span>
+            <div style={s.emptyIcon}>+</div>
             <h3 style={s.emptyTitle}>No posts yet!</h3>
             <p style={s.emptyText}>Be the first to share your knowledge.</p>
             {user && <Link to="/create-post" style={s.emptyBtn}>Create First Post</Link>}
@@ -75,54 +75,67 @@ export default function HomePage() {
 const s = {
   page: { background: theme.bg, minHeight: '100%' },
   hero: {
-    background: `linear-gradient(135deg, ${theme.primaryLight} 0%, ${theme.accentLight} 100%)`,
+    background: theme.primaryLight,
     borderBottom: `1px solid ${theme.border}`,
-    padding: '48px 32px',
+    padding: '40px 24px',
     textAlign: 'center',
   },
   heroTitle: {
-    fontSize: '36px', fontWeight: '800', color: theme.text, marginBottom: '10px',
+    fontSize: '28px', fontWeight: '800', color: theme.primaryDark, marginBottom: '8px',
   },
-  heroSub: { color: theme.textMuted, fontSize: '16px', fontWeight: '600', marginBottom: '20px' },
+  heroSub: { color: theme.textMuted, fontSize: '15px', fontWeight: '500', marginBottom: '20px' },
   heroBtn: {
     display: 'inline-block',
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
-    color: '#fff', padding: '12px 28px', borderRadius: theme.radiusPill,
-    fontWeight: '800', fontSize: '15px', textDecoration: 'none',
-    boxShadow: '0 4px 16px rgba(167,139,250,0.35)',
+    background: theme.primary,
+    color: '#fff', padding: '10px 24px', borderRadius: theme.radiusSm,
+    fontWeight: '600', fontSize: '14px', textDecoration: 'none',
+    transition: 'opacity 0.2s',
   },
-  container: { maxWidth: '1100px', margin: '0 auto', padding: '32px 24px' },
+  container: { maxWidth: '780px', margin: '0 auto', padding: '24px' },
   loadingWrap: {
     display: 'flex', flexDirection: 'column', alignItems: 'center',
-    justifyContent: 'center', minHeight: '60vh', gap: '12px',
+    justifyContent: 'center', minHeight: '60vh', gap: '16px',
   },
-  loadingSpinner: { fontSize: '48px', animation: 'spin 2s linear infinite' },
-  loadingText: { color: theme.textMuted, fontWeight: '600', fontSize: '15px' },
+  loadingSpinner: { 
+    width: '32px', height: '32px', 
+    border: `3px solid ${theme.border}`, 
+    borderTopColor: theme.primary, 
+    borderRadius: '50%', 
+    animation: 'spin 1s linear infinite' 
+  },
+  loadingText: { color: theme.textMuted, fontWeight: '500', fontSize: '14px' },
   errorBox: {
     background: theme.dangerLight, color: theme.danger,
     padding: '12px 20px', borderRadius: theme.radiusSm,
-    fontWeight: '600', fontSize: '14px', marginBottom: '20px',
+    fontWeight: '500', fontSize: '14px', marginBottom: '20px',
+    border: `1px solid rgba(248,113,113,0.2)`,
   },
   sectionTitle: {
-    fontSize: '20px', fontWeight: '800', color: theme.text, marginBottom: '20px',
+    fontSize: '20px', fontWeight: '700', color: theme.text, marginBottom: '24px',
+    borderBottom: `1px solid ${theme.border}`, paddingBottom: '12px',
   },
   grid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-    gap: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '32px',
   },
   empty: {
-    textAlign: 'center', padding: '60px 24px',
-    background: '#fff', borderRadius: theme.radiusLg,
-    border: `1px solid ${theme.border}`,
+    textAlign: 'center', padding: '80px 24px',
+    background: theme.bgCard, borderRadius: theme.radiusSm,
+    border: `1px dashed ${theme.border}`,
   },
-  emptyIcon: { fontSize: '56px', display: 'block', marginBottom: '16px' },
-  emptyTitle: { fontSize: '22px', fontWeight: '800', color: theme.text, marginBottom: '8px' },
-  emptyText: { color: theme.textMuted, fontSize: '15px', marginBottom: '20px', fontWeight: '600' },
+  emptyIcon: { 
+    width: '48px', height: '48px', margin: '0 auto 16px',
+    background: theme.primaryLight, borderRadius: '50%',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    color: theme.primary, fontSize: '20px'
+  },
+  emptyTitle: { fontSize: '18px', fontWeight: '600', color: theme.text, marginBottom: '8px' },
+  emptyText: { color: theme.textMuted, fontSize: '14px', marginBottom: '24px', fontWeight: '400' },
   emptyBtn: {
     display: 'inline-block',
-    background: `linear-gradient(135deg, ${theme.primary}, ${theme.accent})`,
-    color: '#fff', padding: '12px 24px', borderRadius: theme.radiusPill,
-    fontWeight: '800', fontSize: '14px', textDecoration: 'none',
+    background: theme.primary,
+    color: '#fff', padding: '10px 20px', borderRadius: theme.radiusSm,
+    fontWeight: '600', fontSize: '14px', textDecoration: 'none',
   },
 };
