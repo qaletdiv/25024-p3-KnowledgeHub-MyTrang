@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import CommentSection from '../components/CommentSection';
 import RichTextEditor from '../components/RichTextEditor';
 import theme from '../theme';
+import 'quill/dist/quill.snow.css';
 
 const HoverLink = ({ to, style, hoverStyle, children }) => {
   const [hover, setHover] = useState(false);
@@ -193,11 +194,14 @@ export default function PostDetailPage() {
               </div>
             </div>
 
-            {/* Content rendered as HTML from rich text editor */}
-            <div
-              style={s.content}
-              dangerouslySetInnerHTML={{ __html: post.content || '' }}
-            />
+            {/* Content rendered as HTML – wrapped in Quill classes so formatting matches editor 1-1 (bug fix) */}
+            <div className="ql-snow" style={s.contentWrapper}>
+              <div
+                className="ql-editor"
+                style={s.content}
+                dangerouslySetInnerHTML={{ __html: post.content || '' }}
+              />
+            </div>
 
             {/* Owner actions */}
             {isOwner && (
@@ -300,10 +304,14 @@ const s = {
   },
   authorName: { fontWeight: '600', fontSize: '14px', color: theme.text },
   date: { color: theme.textMuted, fontSize: '13px', fontWeight: '500' },
-  content: {
+  contentWrapper: {
     padding: '0 32px 32px',
+  },
+  content: {
     fontSize: '16px', lineHeight: '1.7', color: theme.text,
-    // Quill content styles
+    // Override ql-editor defaults
+    padding: '0',
+    minHeight: 'unset',
   },
   ownerPanel: {
     margin: '0 32px 32px',

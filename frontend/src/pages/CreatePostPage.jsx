@@ -14,9 +14,18 @@ export default function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef();
 
+  const MAX_THUMB_SIZE = 2 * 1024 * 1024; // 2MB – matches backend limit
+
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
+    // Validate size before accepting the file
+    if (file.size > MAX_THUMB_SIZE) {
+      setError('Thumbnail must be smaller than 2 MB. Please choose a different image.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+    setError('');
     setThumbnailFile(file);
     const reader = new FileReader();
     reader.onload = (ev) => setThumbnailPreview(ev.target.result);
@@ -37,16 +46,29 @@ export default function CreatePostPage() {
     if (!plainText) { setError('Content cannot be empty.'); return; }
 
     setLoading(true);
+    let newPostId = null;
     try {
       // 1. Create the post
       const res = await api.post('/post', { title, content });
-      const newPostId = res.data.postId;
+      newPostId = res.data.postId;
 
       // 2. Upload thumbnail if provided
       if (thumbnailFile && newPostId) {
         const formData = new FormData();
         formData.append('thumbnail', thumbnailFile);
-        await api.put(`/post/${newPostId}/thumbnail`, formData);
+        try {
+          await api.put(`/post/${newPostId}/thumbnail`, formData);
+        } catch (thumbErr) {
+          // Rollback: delete the just-created post so no duplicate is left behind
+          try { await api.delete(`/post/${newPostId}`); } catch (_) {}
+          const data = thumbErr.response?.data;
+          setError(
+            (data?.message || 'Failed to upload thumbnail.') +
+            ' The post was not saved. Please try again with an image under 2 MB.'
+          );
+          setLoading(false);
+          return;
+        }
       }
 
       navigate('/');
@@ -104,7 +126,7 @@ export default function CreatePostPage() {
               <div style={s.uploadZone} onClick={() => fileInputRef.current?.click()}>
                 <span style={s.uploadIcon}>+</span>
                 <p style={s.uploadText}>Click to upload thumbnail</p>
-                <p style={s.uploadHint}>PNG, JPG up to 5MB</p>
+                <p style={s.uploadHint}>PNG, JPG up to 2MB</p>
               </div>
             )}
             <input
